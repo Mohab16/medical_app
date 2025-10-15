@@ -20,6 +20,7 @@ class DocApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: ColorsManager.mainBLue,
           scaffoldBackgroundColor: Colors.white,
+          useMaterial3: false,
         ),
         initialRoute: Routes.onBoardingScreen,
       ),
