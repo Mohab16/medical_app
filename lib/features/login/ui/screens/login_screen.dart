@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_app/core/helpers/spacing.dart';
 import 'package:medical_app/core/themes/styles.dart';
 import 'package:medical_app/core/widgets/app_text_button.dart';
-import 'package:medical_app/core/widgets/app_text_form_field.dart';
+import 'package:medical_app/features/login/data/models/login_request_body.dart';
+import 'package:medical_app/features/login/logic/cubit/login_cubit.dart';
 import 'package:medical_app/features/login/ui/widgets/already_have_account.dart';
+import 'package:medical_app/features/login/ui/widgets/email_and_password.dart';
+import 'package:medical_app/features/login/ui/widgets/login_bloc_listener.dart';
 import 'package:medical_app/features/login/ui/widgets/terms_and_conditions_text.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
-   bool isObscureText = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 40.h),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -41,36 +38,31 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 verticalSpacing(36),
 
-                Form(
-                  child: Column(
-                    children: [
-                      AppTextFormField(hintText: 'Email'),
-                      verticalSpacing(18),
-                      AppTextFormField(
-                        
-                        hintText: 'Password',
-                        isObscureText: isObscureText,
-                        suffixIcon: IconButton(onPressed:() {
-                          setState(() {
-                                                      isObscureText=!isObscureText;
-
-                          });
-                        }, icon: Icon(isObscureText? Icons.visibility_off:Icons.visibility))
+                Column(
+                  children: [
+                    const EmailAndPassword(),
+                     verticalSpacing(24),
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyles.font12BlueRegular,
                       ),
-                      verticalSpacing(24),
-                      Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: Text("Forgot Password?", style:TextStyles.font12BlueRegular)),
-                        verticalSpacing(40),
-                        AppTextButton(buttonText: "Login", onPressed: () {  },),
-                        verticalSpacing(16),
-                                                 TermsAndConditionsText(),
+                    ),
+                    verticalSpacing(40),
+                    AppTextButton(
+                      buttonText: "Login",
+                      onPressed: () {
+                        validateThenDoLogin(context);
+                      },
+                    ),
+                    verticalSpacing(16),
+                    TermsAndConditionsText(),
 
-                        verticalSpacing(60),
-                         AlreadyHaveAccount(),
-
-                    ],
-                  ),
+                    verticalSpacing(60),
+                    AlreadyHaveAccount(),
+                    const LoginBlocListener(),
+                  ],
                 ),
               ],
             ),
@@ -79,4 +71,16 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  void validateThenDoLogin(BuildContext context) {
+    if (context.read<LoginCubit>().formKey.currentState!.validate()) {
+      context.read<LoginCubit>().emitLoginStates(
+        LoginRequestBody(
+          email: context.read<LoginCubit>().emailController.text,
+          password: context.read<LoginCubit>().passwordController.text,
+        ),
+      );
+    }
+  }
+  
 }

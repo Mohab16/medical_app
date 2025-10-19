@@ -60,6 +60,12 @@ color:ColorsManager.mainBLue
 color:ColorsManager.mainBLue
 
   );
+  static TextStyle font14BlueSemiBold = TextStyle(
+    fontWeight: FontWeightHelper.semiBold,
+    fontSize: 14.sp,
+color:ColorsManager.mainBLue
+
+  );
   static TextStyle font13DarkBlueRegular = TextStyle(
     fontWeight: FontWeightHelper.regular,
     fontSize: 13.sp,
@@ -69,6 +75,12 @@ color:ColorsManager.darkBlue
   static TextStyle font13DarkBlueMedium = TextStyle(
     fontWeight: FontWeightHelper.medium,
     fontSize: 13.sp,
+color:ColorsManager.darkBlue
+
+  );
+  static TextStyle font15DarkBlueMedium = TextStyle(
+    fontWeight: FontWeightHelper.medium,
+    fontSize: 15.sp,
 color:ColorsManager.darkBlue
 
   );
