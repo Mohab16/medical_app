@@ -30,6 +30,7 @@ class LoginBlocListener extends StatelessWidget {
             context.pushNamed(Routes.homeScreen);
           },
           error: (error) {
+
             setupErrorState(context, "Invalid email or password");
           },
         );
