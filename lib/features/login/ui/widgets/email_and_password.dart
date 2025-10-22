@@ -4,7 +4,6 @@ import 'package:medical_app/core/helpers/app_regex.dart';
 import 'package:medical_app/core/helpers/spacing.dart';
 import 'package:medical_app/core/widgets/app_text_form_field.dart';
 import 'package:medical_app/features/login/logic/cubit/login_cubit.dart';
-import 'package:medical_app/features/login/ui/widgets/password_validations.dart';
 
 class EmailAndPassword extends StatefulWidget {
   const EmailAndPassword({super.key});
@@ -47,54 +46,45 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: context.read<LoginCubit>().formKey,
-      child: Column(
-        children: [
-          AppTextFormField(
-            hintText: 'Email',
-            validator: (value) {
-              if (value == null ||
-                  value.isEmpty ||
-                  !AppRegex.isEmailValid(value)) {
-                return 'Please enter a valid email';
-              }
+    return Column(
+      children: [
+        AppTextFormField(
+          hintText: 'Email',
+          validator: (value) {
+            if (value == null ||
+                value.isEmpty ||
+                !AppRegex.isEmailValid(value)) {
+              return 'Please enter a valid email';
+            }
+          },
+          controller: context.read<LoginCubit>().emailController,
+        ),
+        verticalSpacing(18),
+        AppTextFormField(
+          controller: context.read<LoginCubit>().passwordController,
+          hintText: 'Password',
+          isObscureText: isObscureText,
+          suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                isObscureText = !isObscureText;
+              });
             },
-            controller: context.read<LoginCubit>().emailController,
-          ),
-          verticalSpacing(18),
-          AppTextFormField(
-            controller: context.read<LoginCubit>().passwordController,
-            hintText: 'Password',
-            isObscureText: isObscureText,
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  isObscureText = !isObscureText;
-                });
-              },
-              icon: Icon(
-                isObscureText ? Icons.visibility_off : Icons.visibility,
-              ),
+            icon: Icon(
+              isObscureText ? Icons.visibility_off : Icons.visibility,
             ),
-            validator: (value) {
-              if (value == null ||
-                  value.isEmpty ) {
-                return 'Please enter a valid password';
-              }
-            },
           ),
-
-          verticalSpacing(24),
-        //  PasswordValidations(
-         //   hasLowercase: hasLowercase,
-          //  hasUppercase: hasUppercase,
-           // hasNumber: hasNumber,
-           // hasNumberSpecialChar: hasNumberSpecialChar,
-           // hasMinLength: hasMinLength,
-         // ),
-        ],
-      ),
+          validator: (value) {
+            if (value == null ||
+                value.isEmpty ) {
+              return 'Please enter a valid password';
+            }
+          },
+        ),
+    
+        verticalSpacing(24),
+     
+      ],
     );
   }
 

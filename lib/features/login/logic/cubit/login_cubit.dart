@@ -12,7 +12,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   TextEditingController emailController= TextEditingController();
   TextEditingController passwordController= TextEditingController();
-  final formKey=GlobalKey<FormState>();
+ // final formKey=GlobalKey<FormState>();
 
   void emitLoginStates(LoginRequestBody loginRequestBody) async {
     emit(LoginState.loading());
@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginState.success(loginResponse));
       },
       failure: (error) {
-        emit(LoginState.error(error: error.apiErrorModel.message ?? ''));
+        emit(LoginState.error(error: error.apiErrorModel.message?? ''));
       },
     );
   }
