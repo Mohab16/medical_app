@@ -24,17 +24,29 @@ android {
     }
 
     defaultConfig {
-    applicationId = "com.example.medical_app"
-    minSdk = 21  // Make sure this is at least 21
-    targetSdk = flutter.targetSdkVersion
-    versionCode = flutter.versionCode
-    versionName = flutter.versionName
-}
+        applicationId = "com.example.medical_app"
+        minSdk = 21
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    flavorDimensions += "default"
+
+    productFlavors {
+        create("development") {
+            dimension = "default"
+            resValue("string", "app_name", "DocDoc Development")
+        }
+        create("production") {
+            dimension = "default"
+            resValue("string", "app_name", "DocDoc Production")
+            applicationIdSuffix = ".production"
+        }
+    }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
