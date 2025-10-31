@@ -84,5 +84,47 @@ color:ColorsManager.darkBlue
 color:ColorsManager.darkBlue
 
   );
+  static TextStyle font18DarkBlueBold = TextStyle(
+    fontWeight: FontWeightHelper.bold,
+    fontSize: 18.sp,
+color:ColorsManager.darkBlue
+
+  );
+  static TextStyle font11MediumGrayRegular = TextStyle(
+    fontWeight: FontWeightHelper.regular,
+    fontSize: 11.sp,
+color:ColorsManager.mediumGray
+
+  );
+  static TextStyle font18WhiteMedium = TextStyle(
+    fontWeight: FontWeightHelper.medium,
+    fontSize: 18.sp,
+color:Colors.white
+
+  );
+  static TextStyle font12MainBlueRegular = TextStyle(
+    fontWeight: FontWeightHelper.regular,
+    fontSize: 12.sp,
+color:ColorsManager.mainBLue,
+
+  );
+  static TextStyle font18DarkBlueSemiBold = TextStyle(
+    fontWeight: FontWeightHelper.semiBold,
+    fontSize: 18.sp,
+color:ColorsManager.darkBlue,
+
+  );
+  static TextStyle font12DarkBlueRegular = TextStyle(
+    fontWeight: FontWeightHelper.regular,
+    fontSize: 12.sp,
+color:ColorsManager.darkBlue,
+
+  );
+  static TextStyle font12GrayRegular = TextStyle(
+    fontWeight: FontWeightHelper.regular,
+    fontSize: 12.sp,
+color:ColorsManager.gray,
+
+  );
   
 }

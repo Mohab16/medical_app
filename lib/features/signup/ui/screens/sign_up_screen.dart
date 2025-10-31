@@ -56,6 +56,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 verticalSpacing(16),
                 SignUpBlocListener(),
+                
               ],
             ),
           ),
