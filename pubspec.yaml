@@ -51,6 +51,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   build_runner: ^2.9.0
   firebase_core: ^4.2.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,7 @@ flutter:
   assets:
      - assets/images/
      - assets/svgs/
+     - assets/images/specializations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

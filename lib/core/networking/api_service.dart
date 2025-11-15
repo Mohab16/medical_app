@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:medical_app/core/networking/api_constants.dart';
+import 'package:medical_app/features/home/data/models/home_data_response.dart';
 import 'package:medical_app/features/login/data/models/login_request_body.dart';
 import 'package:medical_app/features/login/data/models/login_response.dart';
 import 'package:medical_app/features/signup/data/models/sign_up_request_body.dart';
@@ -20,4 +21,8 @@ Future<LoginResponse> login(
 Future<SignUpResponse> signUp(
   @Body() SignUpRequestBody signUpRequestBody
 );
+ @GET(ApiConstants.homeData)
+ Future<HomeDataResponse> getHomeData(
+   @Header("Authorization") String token,
+ );
 }

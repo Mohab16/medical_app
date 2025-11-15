@@ -6,7 +6,6 @@ part of 'sign_up_request_body.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-// ignore: unused_element
 SignUpRequestBody _$SignUpRequestBodyFromJson(Map<String, dynamic> json) =>
     SignUpRequestBody(
       gender: json['gender'] as String,

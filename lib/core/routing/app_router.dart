@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medical_app/core/di/dependency_injection.dart';
 import 'package:medical_app/core/routing/routes.dart';
+import 'package:medical_app/features/home/data/models/home_data_response.dart';
+import 'package:medical_app/features/home/logic/cubit/home_data_cubit.dart';
+import 'package:medical_app/features/home/ui/screens/doctor_details_screen.dart';
+import 'package:medical_app/features/home/ui/screens/doctor_specialities_screen.dart';
 import 'package:medical_app/features/home/ui/screens/home_screen.dart';
+import 'package:medical_app/features/home/ui/screens/speciality_doctors_screen.dart';
 import 'package:medical_app/features/login/logic/cubit/login_cubit.dart';
 import 'package:medical_app/features/onboarding/onboarding_screen.dart';
 import 'package:medical_app/features/login/ui/screens/login_screen.dart';
@@ -25,7 +30,19 @@ class AppRouter {
           ),
         );
       case Routes.homeScreen:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+      final userName=settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<HomeDataCubit>(),
+            child: HomeScreen(userName: userName,),
+          ),
+        );
+      case Routes.doctorDetailsScreen:
+                final doctor = settings.arguments as Doctors;
+
+        return MaterialPageRoute(
+          builder: (_) => DoctorDetailsScreen(doctor: doctor,),
+        );
       case Routes.signUpScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -33,6 +50,29 @@ class AppRouter {
             child: SignUpScreen(),
           ),
         );
+      case Routes.doctorSpeicalitiesScreen:
+        final cubit = settings.arguments as HomeDataCubit;
+
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: cubit,
+            child: DoctorSpecialitiesScreen(),
+          ),
+        );
+      case Routes.specialityDoctorsScreen:
+        final args = settings.arguments as Map<String,dynamic>;
+        final cubit=args['cubit'] as HomeDataCubit;
+        final id=args['id'] as int;
+
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: cubit,
+            child: SpecialityDoctorsScreen(selectedId: id,
+             
+            ),
+          ),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
