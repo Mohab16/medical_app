@@ -1,3 +1,4 @@
+import 'package:medical_app/core/helpers/storage.dart';
 import 'package:medical_app/core/networking/api_error_handler.dart';
 import 'package:medical_app/core/networking/api_result.dart';
 import 'package:medical_app/core/networking/api_service.dart';
@@ -12,6 +13,10 @@ class LoginRepo {
   Future<ApiResult<LoginResponse>> login(LoginRequestBody loginRequestBody) async{
     try{
 final response=await _apiService.login(loginRequestBody);
+final token=response.userData?.token;
+if(token!=null&&token.isNotEmpty){
+  await Storage.saveToken(token);
+}
       return ApiResult.success(response);
     }catch(error){
       return ApiResult.failure(ErrorHandler.handle(error));

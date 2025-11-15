@@ -28,6 +28,10 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     super.initState();
     passwordController = context.read<LoginCubit>().passwordController;
     //setuPasswordControllerListener();
+    final cubit=context.read<LoginCubit>();
+    cubit.emailController.text="";
+    cubit.passwordController.text="";
+
   }
 
  // void setuPasswordControllerListener() {
@@ -88,10 +92,9 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   passwordController.dispose();
+  @override
+  void dispose() {
   
-  //   super.dispose();
-  // }
+    super.dispose();
+  }
 }

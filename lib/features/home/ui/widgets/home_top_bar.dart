@@ -5,7 +5,8 @@ import 'package:medical_app/core/themes/colors.dart';
 import 'package:medical_app/core/themes/styles.dart';
 
 class HomeTopBar extends StatelessWidget {
-  const HomeTopBar({super.key});
+  final String userName;
+  const HomeTopBar({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class HomeTopBar extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-Text("Hi, Mohab!",style: TextStyles.font18DarkBlueBold,),
+Text("Hi, $userName!",style: TextStyles.font18DarkBlueBold,),
 verticalSpacing(8),
 Text("How Are you Today?",style: TextStyles.font11MediumGrayRegular,),
           ],
