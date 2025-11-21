@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_app/core/helpers/extensions.dart';
 import 'package:medical_app/core/helpers/spacing.dart';
+import 'package:medical_app/core/routing/routes.dart';
 import 'package:medical_app/core/themes/colors.dart';
 import 'package:medical_app/core/themes/styles.dart';
 import 'package:medical_app/features/home/data/models/home_data_response.dart';
-import 'package:medical_app/features/home/ui/widgets/custom_app_bar.dart';
-import 'package:medical_app/features/home/ui/widgets/recommendation_doctor_list_tile.dart';
+import 'package:medical_app/core/widgets/custom_app_bar.dart';
+import 'package:medical_app/core/widgets/recommendation_doctor_list_tile.dart';
 import 'package:intl/intl.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class DoctorDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+            padding: EdgeInsets.symmetric(horizontal: 12.w,),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -85,14 +86,16 @@ class DoctorDetailsScreen extends StatelessWidget {
                       ),
                       verticalSpacing(10),
                       Text(
-                        "All the weekdays from ${formatTime(doctor.startTime!)} to ${formatTime(doctor.endTime!)}",
+                        "All the weekdays from ${formatTime(doctor.startTime!)}PM to ${formatTime(doctor.endTime!)}PM",
                         style: TextStyles.font14GrayRegular,
                       ),
                       verticalSpacing(160),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushNamed(Routes.appointmentScreen, arguments: doctor);
+                          },
                           style: ElevatedButton.styleFrom(
                             minimumSize: Size(327.w, 52.h),
                             shape: RoundedRectangleBorder(
