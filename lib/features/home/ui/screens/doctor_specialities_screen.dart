@@ -9,7 +9,7 @@ import 'package:medical_app/core/themes/colors.dart';
 import 'package:medical_app/core/themes/styles.dart';
 import 'package:medical_app/features/home/logic/cubit/home_data_cubit.dart';
 import 'package:medical_app/features/home/logic/cubit/home_data_state.dart';
-import 'package:medical_app/features/home/ui/widgets/custom_app_bar.dart';
+import 'package:medical_app/core/widgets/custom_app_bar.dart';
 
 class DoctorSpecialitiesScreen extends StatefulWidget {
   const DoctorSpecialitiesScreen({super.key});

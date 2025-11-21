@@ -13,4 +13,6 @@ static const Color mediumGray = Color(0xFF616161);
 static const Color moreLighterGray = Color(0xFFF5F5F5);
 static const Color yellow = Color(0xFFFFD600);
 static const Color lightBlue = Color(0xFFF4F8FF);
+static const Color heavyGrey = Color(0xE0E0E0E0);
+static const Color buttonsGrey = Color(0xFFF2F4F7);
 }

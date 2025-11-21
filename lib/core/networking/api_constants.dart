@@ -4,6 +4,7 @@ class ApiConstants {
   static const String register= "auth/register";
   static const String homeSpecialization= "/specialization/index";
   static const String homeData= "/specialization/index";
+  static const String appointmentStore= "/appointment/store";
 
 }
 

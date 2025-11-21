@@ -150,5 +150,29 @@ color:ColorsManager.lightGray,
 color:ColorsManager.darkBlue,
 
   );
+  static TextStyle font14LightGreySemiBold = TextStyle(
+    fontWeight: FontWeightHelper.semiBold,
+    fontSize: 14.sp,
+color:ColorsManager.lightGray,
+
+  );
+  static TextStyle font14WhiteSemiBold = TextStyle(
+    fontWeight: FontWeightHelper.semiBold,
+    fontSize: 14.sp,
+color:Colors.white,
+
+  );
+  static TextStyle font14DarkBlueSemiBold = TextStyle(
+    fontWeight: FontWeightHelper.semiBold,
+    fontSize: 14.sp,
+color:ColorsManager.darkBlue,
+
+  );
+  static TextStyle font20DarkBlueMedium = TextStyle(
+    fontWeight: FontWeightHelper.medium,
+    fontSize: 20.sp,
+color:ColorsManager.darkBlue,
+
+  );
   
 }

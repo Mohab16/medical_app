@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:medical_app/core/networking/api_constants.dart';
+import 'package:medical_app/features/appointment/data/model/book_appointment_request_body.dart';
+import 'package:medical_app/features/appointment/data/model/book_appointment_response.dart';
 import 'package:medical_app/features/home/data/models/home_data_response.dart';
 import 'package:medical_app/features/login/data/models/login_request_body.dart';
 import 'package:medical_app/features/login/data/models/login_response.dart';
@@ -24,5 +26,10 @@ Future<SignUpResponse> signUp(
  @GET(ApiConstants.homeData)
  Future<HomeDataResponse> getHomeData(
    @Header("Authorization") String token,
+ );
+
+ @POST(ApiConstants.appointmentStore)
+ Future <BookAppointmentResponse> bookAppointment(
+  @Body() BookAppointmentRequestBody bookRequestModel
  );
 }

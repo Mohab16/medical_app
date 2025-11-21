@@ -9,8 +9,8 @@ import 'package:medical_app/core/themes/styles.dart';
 import 'package:medical_app/features/home/data/models/home_data_response.dart';
 import 'package:medical_app/features/home/logic/cubit/home_data_cubit.dart';
 import 'package:medical_app/features/home/logic/cubit/home_data_state.dart';
-import 'package:medical_app/features/home/ui/widgets/custom_app_bar.dart';
-import 'package:medical_app/features/home/ui/widgets/recommendation_doctor_list_tile.dart';
+import 'package:medical_app/core/widgets/custom_app_bar.dart';
+import 'package:medical_app/core/widgets/recommendation_doctor_list_tile.dart';
 
 class SpecialityDoctorsScreen extends StatefulWidget {
   final int selectedId;
@@ -91,7 +91,6 @@ class _SpecialityDoctorsScreenState extends State<SpecialityDoctorsScreen> {
               loading: () => Center(child: CircularProgressIndicator()),
               error: (error) => Center(child: Text("Something wrong occured")),
               success: (response) {
-                print(widget.selectedId);
                 final speciality = response.data![widget.selectedId].name;
                 allDoctorsList =
                     response.data![widget.selectedId].doctors ?? [];

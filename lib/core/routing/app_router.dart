@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medical_app/core/di/dependency_injection.dart';
 import 'package:medical_app/core/routing/routes.dart';
+import 'package:medical_app/features/appointment/ui/screens/appointment_details_screen.dart';
+import 'package:medical_app/features/appointment/ui/screens/appointment_screen.dart';
 import 'package:medical_app/features/home/data/models/home_data_response.dart';
 import 'package:medical_app/features/home/logic/cubit/home_data_cubit.dart';
 import 'package:medical_app/features/home/ui/screens/doctor_details_screen.dart';
@@ -30,18 +32,18 @@ class AppRouter {
           ),
         );
       case Routes.homeScreen:
-      final userName=settings.arguments as String;
+        final userName = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<HomeDataCubit>(),
-            child: HomeScreen(userName: userName,),
+            child: HomeScreen(userName: userName),
           ),
         );
       case Routes.doctorDetailsScreen:
-                final doctor = settings.arguments as Doctors;
+        final doctor = settings.arguments as Doctors;
 
         return MaterialPageRoute(
-          builder: (_) => DoctorDetailsScreen(doctor: doctor,),
+          builder: (_) => DoctorDetailsScreen(doctor: doctor),
         );
       case Routes.signUpScreen:
         return MaterialPageRoute(
@@ -60,18 +62,31 @@ class AppRouter {
           ),
         );
       case Routes.specialityDoctorsScreen:
-        final args = settings.arguments as Map<String,dynamic>;
-        final cubit=args['cubit'] as HomeDataCubit;
-        final id=args['id'] as int;
+        final args = settings.arguments as Map<String, dynamic>;
+        final cubit = args['cubit'] as HomeDataCubit;
+        final id = args['id'] as int;
 
         return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
             value: cubit,
-            child: SpecialityDoctorsScreen(selectedId: id,
-             
-            ),
+            child: SpecialityDoctorsScreen(selectedId: id),
           ),
         );
+      case Routes.appointmentScreen:
+      final doctor = settings.arguments as Doctors;
+        return MaterialPageRoute(builder: (context) => AppointmentScreen(doctor: doctor,));
+        
+        
+      case Routes.appointmentDetailsScreen:
+      final arguments=settings.arguments as Map;
+      final doctor=arguments["doctor"];
+      final fullDate=arguments['fullDate'];
+      final time12=arguments["time12"];
+      final type=arguments["type"];
+
+        return MaterialPageRoute(builder: (context) => AppointmentDetailsScreen(doctor: doctor, fullDate: fullDate, time12: time12, type: type,));
+        
+        
 
       default:
         return MaterialPageRoute(
