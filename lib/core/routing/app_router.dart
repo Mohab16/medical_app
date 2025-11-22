@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medical_app/core/di/dependency_injection.dart';
+import 'package:medical_app/core/helpers/storage.dart';
 import 'package:medical_app/core/routing/routes.dart';
+import 'package:medical_app/features/appointment/logic/cubit/book_appointment_cubit.dart';
 import 'package:medical_app/features/appointment/ui/screens/appointment_details_screen.dart';
 import 'package:medical_app/features/appointment/ui/screens/appointment_screen.dart';
 import 'package:medical_app/features/home/data/models/home_data_response.dart';
@@ -32,11 +34,10 @@ class AppRouter {
           ),
         );
       case Routes.homeScreen:
-        final userName = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<HomeDataCubit>(),
-            child: HomeScreen(userName: userName),
+            child: HomeScreen(),
           ),
         );
       case Routes.doctorDetailsScreen:
@@ -73,20 +74,29 @@ class AppRouter {
           ),
         );
       case Routes.appointmentScreen:
-      final doctor = settings.arguments as Doctors;
-        return MaterialPageRoute(builder: (context) => AppointmentScreen(doctor: doctor,));
-        
-        
-      case Routes.appointmentDetailsScreen:
-      final arguments=settings.arguments as Map;
-      final doctor=arguments["doctor"];
-      final fullDate=arguments['fullDate'];
-      final time12=arguments["time12"];
-      final type=arguments["type"];
+        final doctor = settings.arguments as Doctors;
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<BookAppointmentCubit>(),
+            child: AppointmentScreen(doctor: doctor),
+          ),
+        );
 
-        return MaterialPageRoute(builder: (context) => AppointmentDetailsScreen(doctor: doctor, fullDate: fullDate, time12: time12, type: type,));
-        
-        
+      case Routes.appointmentDetailsScreen:
+        final arguments = settings.arguments as Map<String,dynamic>;
+        final doctor = arguments["doctor"];
+        final fullDate = arguments['fullDate'];
+        final time12 = arguments["time12"];
+        final type = arguments["type"];
+
+        return MaterialPageRoute(
+          builder: (context) => AppointmentDetailsScreen(
+            doctor: doctor,
+            fullDate: fullDate,
+            time12: time12,
+            type: type,
+          ),
+        );
 
       default:
         return MaterialPageRoute(

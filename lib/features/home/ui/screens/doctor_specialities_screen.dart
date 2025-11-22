@@ -41,7 +41,7 @@ class _DoctorSpecialitiesScreenState extends State<DoctorSpecialitiesScreen> {
                     return state.when(
                       initial: ()=> Center(child: CircularProgressIndicator(color: ColorsManager.mainBLue,),),
                       loading: ()=> Center(child: CircularProgressIndicator(color: ColorsManager.mainBLue,),),
-                      success:(response) {
+                      success:(response,userName) {
                         final specialities=response.data??[];
                          return GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

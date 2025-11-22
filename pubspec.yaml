@@ -52,6 +52,7 @@ dependencies:
   build_runner: ^2.9.0
   firebase_core: ^4.2.0
   shared_preferences: ^2.5.3
+  skeletonizer: ^2.1.0+1
 
 dev_dependencies:
   flutter_test:

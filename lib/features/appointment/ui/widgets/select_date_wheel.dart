@@ -5,7 +5,7 @@ import 'package:medical_app/core/helpers/spacing.dart';
 import 'package:medical_app/core/themes/colors.dart';
 
 class SelectDateWheel extends StatefulWidget {
-  final Function (String) onDateChanged;
+  final Function(String) onDateChanged;
   const SelectDateWheel({super.key, required this.onDateChanged});
 
   @override
@@ -38,92 +38,143 @@ class _SelectDateWheelState extends State<SelectDateWheel> {
     _controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-   List<Map<String, String>> generateWeekDates() {
-    DateTime now = DateTime.now();
+    List<Map<String, String>> generateWeekDates() {
+      DateTime now = DateTime.now();
 
-    return List.generate(7, (i) {
-      DateTime date = now.add(Duration(days: i + 1));
-      return {
-        'day': DateFormat('E').format(date),
-        'date': DateFormat('dd').format(date),
-        'selected date': DateFormat('yyyy-MM-dd').format(date),
-      };
-    });
-  }
+      return List.generate(7, (i) {
+        DateTime date = now.add(Duration(days: i + 1));
+        return {
+          'day': DateFormat('E').format(date),
+          'date': DateFormat('dd').format(date),
+          'selected date': DateFormat('yyyy-MM-dd').format(date),
+        };
+      });
+    }
+
     final days = generateWeekDates();
 
     return SizedBox(
-      height: 120.h,
-      child: PageView.builder(
-        onPageChanged: (index) {
-          setState(() {
-            selectedDate = index; // ✅ update state when page changes
-          });
-          widget.onDateChanged(days[index]['selected date']!);
-        },
-        scrollDirection: Axis.horizontal,
-        controller: _controller,
-        itemCount: days.length,
-        itemBuilder: (context, index) {
-          return AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              double value = 1.0;
-              if (_controller.position.haveDimensions) {
-                value = _controller.page! - index;
-                value = (1 - (value.abs() * 0.3)).clamp(0.8, 1.0);
+      height: 110.h,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              if (_controller.hasClients && selectedDate > 0) {
+                final previousPage = selectedDate - 1;
+
+                // 🔹 حرّك الـ PageView
+                _controller.animateToPage(
+                  previousPage,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+
+                // 🔹 حدّث الحالة وبلّغ الـ parent
+                setState(() => selectedDate = previousPage);
+                widget.onDateChanged(days[previousPage]['selected date']!);
               }
-
-              /// ✅ Use your selectedDate state, not controller.page
-              bool isSelected = selectedDate == index;
-
-              return Center(
-                child: Transform.scale(
-                  scale: value,
-                  child: Container(
-                    width: 55.w,
-                    height: 62.h,
-                    margin: EdgeInsets.symmetric(horizontal: 3.w),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.w,
-                      vertical: 10.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? ColorsManager.mainBLue
-                          : ColorsManager.buttonsGrey,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          days[index]['day']!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: isSelected ? Colors.white : ColorsManager.lightGray,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        verticalSpacing(4),
-                        Text(
-                          days[index]['date']!,
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : ColorsManager.lightGray,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
             },
-          );
-        },
+            child: Icon(Icons.arrow_back_ios, size: 18.sp),
+          ),
+          Expanded(
+            child: PageView.builder(
+              onPageChanged: (index) {
+                setState(() {
+                  selectedDate = index; // ✅ update state when page changes
+                });
+                widget.onDateChanged(days[index]['selected date']!);
+              },
+              scrollDirection: Axis.horizontal,
+              controller: _controller,
+              itemCount: days.length,
+              itemBuilder: (context, index) {
+                return AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    double value = 1.0;
+                    if (_controller.position.haveDimensions) {
+                      value = _controller.page! - index;
+                      value = (1 - (value.abs() * 0.3)).clamp(0.8, 1.0);
+                    }
+
+                    /// ✅ Use your selectedDate state, not controller.page
+                    bool isSelected = selectedDate == index;
+
+                    return Center(
+                      child: Transform.scale(
+                        scale: value,
+                        child: Container(
+                          width: 55.w,
+                          height: 70.h,
+                          //margin: EdgeInsets.symmetric(horizontal: 3.w),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 14.w,
+                            vertical: 10.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? ColorsManager.mainBLue
+                                : ColorsManager.buttonsGrey,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                days[index]['day']!,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : ColorsManager.lightGray,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              verticalSpacing(4),
+                              Text(
+                                days[index]['date']!,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Colors.white
+                                      : ColorsManager.lightGray,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              if (_controller.hasClients && selectedDate < days.length - 1) {
+                final previousPage = selectedDate + 1;
+
+                // 🔹 حرّك الـ PageView
+                _controller.animateToPage(
+                  previousPage,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+
+                // 🔹 حدّث الحالة وبلّغ الـ parent
+                setState(() => selectedDate = previousPage);
+                widget.onDateChanged(days[previousPage]['selected date']!);
+              }
+            },
+
+            child: Icon(Icons.arrow_forward_ios, size: 18.sp),
+          ),
+        ],
       ),
     );
   }

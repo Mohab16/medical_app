@@ -90,7 +90,7 @@ class _SpecialityDoctorsScreenState extends State<SpecialityDoctorsScreen> {
               initial: () => Center(child: CircularProgressIndicator()),
               loading: () => Center(child: CircularProgressIndicator()),
               error: (error) => Center(child: Text("Something wrong occured")),
-              success: (response) {
+              success: (response,userName) {
                 final speciality = response.data![widget.selectedId].name;
                 allDoctorsList =
                     response.data![widget.selectedId].doctors ?? [];

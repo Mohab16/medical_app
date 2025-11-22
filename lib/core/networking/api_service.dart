@@ -30,6 +30,7 @@ Future<SignUpResponse> signUp(
 
  @POST(ApiConstants.appointmentStore)
  Future <BookAppointmentResponse> bookAppointment(
-  @Body() BookAppointmentRequestBody bookRequestModel
+  @Body() BookAppointmentRequestBody bookAppointmentRequestBody,
+  @Header("Authorization") String token,
  );
 }

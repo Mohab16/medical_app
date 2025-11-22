@@ -106,15 +106,17 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<InvalidType> bookAppointment(
-    BookAppointmentRequestBody bookRequestModel,
+  Future<BookAppointmentResponse> bookAppointment(
+    BookAppointmentRequestBody bookAppointmentRequestBody,
+    String token,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    _data.addAll(bookRequestModel.toJson());
-    final _options = _setStreamType<InvalidType>(
+    _data.addAll(bookAppointmentRequestBody.toJson());
+    final _options = _setStreamType<BookAppointmentResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -125,9 +127,9 @@ class _ApiService implements ApiService {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late InvalidType _value;
+    late BookAppointmentResponse _value;
     try {
-      _value = InvalidType.fromJson(_result.data!);
+      _value = BookAppointmentResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

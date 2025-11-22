@@ -30,6 +30,7 @@ ErrorData _$ErrorDataFromJson(Map<String, dynamic> json) => ErrorData(
   password: json['password'],
 );
 
+// ignore: unused_element
 Map<String, dynamic> _$ErrorDataToJson(ErrorData instance) => <String, dynamic>{
   'name': instance.name,
   'email': instance.email,

@@ -14,8 +14,12 @@ class LoginRepo {
     try{
 final response=await _apiService.login(loginRequestBody);
 final token=response.userData?.token;
+final userName=response.userData?.userName;
 if(token!=null&&token.isNotEmpty){
   await Storage.saveToken(token);
+}
+if(userName!=null&&userName.isNotEmpty){
+  await Storage.saveUserName(userName);
 }
       return ApiResult.success(response);
     }catch(error){

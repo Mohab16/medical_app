@@ -13,20 +13,24 @@ class HomeDataCubit extends Cubit<HomeDataState> {
   void emitHomeDataStates() async {
     emit(HomeDataState.loading());
 
+    // await Future.delayed(Duration(seconds:10));
+
     final token = await Storage.getToken(); // ✅ get actual token value
     if (token == null) {
       emit(Error(error: "No token found"));
+      return;
+    }
+    final userName = await Storage.getUserName(); // ✅ get actual username value
+    if (userName == null) {
+      emit(Error(error: "No no username found"));
       return;
     }
 
     final response = await homeDataRepo.getHomeData(token);
     response.when(
       success: (homeDataResponse) {
-        print("✅ message: ${homeDataResponse.message}");
-        print("✅ data length: ${homeDataResponse.data?.length}");
-        print("✅ first item: ${homeDataResponse.data?.first.name}");
-        print("✅ token: ${token}");
-        emit(HomeDataState.success(homeDataResponse));
+       
+        emit(HomeDataState.success(homeDataResponse,userName));
       },
 
       failure: (error) {
@@ -41,11 +45,11 @@ class HomeDataCubit extends Cubit<HomeDataState> {
   void changeSpeciality(int id) {
     selectedId = id;
     state.whenOrNull(
-      success: (response) {
+      success: (response,userName) {
         emit(HomeDataState.loading()); // ✅ Emit loading first
 
         // re-emit same success state so UI rebuilds
-        emit(HomeDataState.success(response));
+        emit(HomeDataState.success(response,userName));
       },
     );
   }
