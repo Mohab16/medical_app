@@ -4,7 +4,8 @@ import 'package:medical_app/core/helpers/spacing.dart';
 import 'package:medical_app/core/themes/styles.dart';
 
 class Payment extends StatefulWidget {
-  const Payment({super.key});
+  final Function(String) onOptionChanged;
+  const Payment({super.key, required this.onOptionChanged});
 
   @override
   State<Payment> createState() => _PaymentState();
@@ -15,12 +16,20 @@ final List paymentOptions = [
   "Bank transfer",
   "Paypal",
   "Pay at appointment",
+
 ];
-String selectedOption = '';
 
 class _PaymentState extends State<Payment> {
+    String selectedPaymentOption = '';
+@override
+  void initState() {
+    super.initState();
+WidgetsBinding.instance.addPostFrameCallback((_) {
+  widget.onOptionChanged(selectedPaymentOption);
+});  }
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +43,7 @@ class _PaymentState extends State<Payment> {
             return RadioListTile(
               contentPadding: EdgeInsets.zero,
               value: paymentOptions[index],
-              groupValue: selectedOption,
+              groupValue: selectedPaymentOption,
               onChanged: (value) {
                 if (index < 3) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -42,15 +51,17 @@ class _PaymentState extends State<Payment> {
                   SnackBar(
                     behavior: SnackBarBehavior.floating,
                     margin: EdgeInsets.all(16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     duration: Duration(seconds: 2),
                     
                     content: Text("Coming Soon!"))
                  );
                 } else {
                   setState(() {
-                    selectedOption = value as String;
+                    
+                    selectedPaymentOption = value as String;
                   });
+                  widget.onOptionChanged(selectedPaymentOption);
                 }
               },
               title: Text(

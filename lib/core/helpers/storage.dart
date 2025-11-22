@@ -15,4 +15,15 @@ await prefs.setString(_tokenKey, token);
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
   }
+  static const _userName="userName";
+  static Future <void> saveUserName(String userName) async {
+final prefs=await SharedPreferences.getInstance();
+await prefs.setString(_userName, userName);
+  } 
+
+ static Future<String?> getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userName);
+  }
+   
 }

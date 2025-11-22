@@ -11,8 +11,7 @@ import 'package:medical_app/features/home/ui/widgets/home_top_bar.dart';
 import 'package:medical_app/features/home/ui/widgets/recommendation_doctor_see_all.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String userName;
-  const HomeScreen({super.key, required this.userName});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,12 +33,20 @@ class _HomeScreenState extends State<HomeScreen> {
           body: SafeArea(
             child: Container(
               width: double.infinity,
-              margin: EdgeInsets.fromLTRB(18, 16, 20, 28),
+              margin: EdgeInsets.fromLTRB(18, 16, 20, 0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     HomeTopBar(userName: widget.userName,),
+                    BlocBuilder<HomeDataCubit, HomeDataState>(
+                      builder: (context, state) {
+                        String userName='';
+                        state.whenOrNull(success: (homeDataResponse, name) {
+                          userName=name??'';
+                        },);
+                        return HomeTopBar(userName: userName);
+                      },
+                    ),
                     const DoctorsBlueContainer(),
                     verticalSpacing(16.h),
                     const DoctorSpecialitySeeAll(),

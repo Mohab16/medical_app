@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_app/core/helpers/extensions.dart';
 import 'package:medical_app/core/helpers/spacing.dart';
+import 'package:medical_app/core/routing/routes.dart';
 import 'package:medical_app/core/themes/styles.dart';
 import 'package:medical_app/core/widgets/app_text_button.dart';
 import 'package:medical_app/core/widgets/custom_app_bar.dart';
@@ -62,6 +63,11 @@ class AppointmentDetailsScreen extends StatelessWidget {
         DoctorInformation(doctor: doctor,),
         verticalSpacing(25),
         AppTextButton(buttonText: "Done", onPressed: (){
+context.pushNamedAndRemoveUntil(
+  Routes.homeScreen,
+  predicate: (route) => false,
+);
+
 
         })
                  ],

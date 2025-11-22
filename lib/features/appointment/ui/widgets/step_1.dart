@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:medical_app/core/helpers/spacing.dart';
 import 'package:medical_app/core/themes/styles.dart';
@@ -24,15 +25,17 @@ class Step1 extends StatefulWidget {
   State<Step1> createState() => _Step1State();
 }
 
-String chosenDate = '';
+
+
+class _Step1State extends State<Step1> {
+  String chosenDate = '';
 String chosenTime = '';
 String chosenType = '';
 int currentStep = 0;
-
-class _Step1State extends State<Step1> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Select Date", style: TextStyles.font16DarkBlueSemiBold),
         verticalSpacing(10),
@@ -64,10 +67,23 @@ class _Step1State extends State<Step1> {
           child: AppTextButton(
             buttonText: "Continue",
             onPressed: () {
-             
-                currentStep = 2;
-             
-              widget.onStepChanged(currentStep);
+              if (chosenDate.isNotEmpty && chosenTime.isNotEmpty&&chosenType.isNotEmpty) {
+                widget.onStepChanged(2);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.all(16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    content: const Text(
+                      "Please choose date, time and appointment type before continuing.",
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
             },
           ),
         ),

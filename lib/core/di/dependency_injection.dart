@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:medical_app/core/networking/api_service.dart';
 import 'package:medical_app/core/networking/dio_factory.dart';
+import 'package:medical_app/features/appointment/data/repo/book_appointment_repo.dart';
+import 'package:medical_app/features/appointment/logic/cubit/book_appointment_cubit.dart';
 import 'package:medical_app/features/home/data/repo/home_data_repo.dart';
 import 'package:medical_app/features/home/logic/cubit/home_data_cubit.dart';
 import 'package:medical_app/features/login/data/repo/login_repo.dart';
@@ -24,4 +26,7 @@ Future<void> setupGetIt() async {
   //home data
   getIt.registerLazySingleton<HomeDataRepo>(() => HomeDataRepo(getIt()));
   getIt.registerFactory<HomeDataCubit>(() => HomeDataCubit(getIt()));
+  // booking appointment
+   getIt.registerLazySingleton<BookAppointmentRepo>(() => BookAppointmentRepo(getIt()));
+  getIt.registerFactory<BookAppointmentCubit>(() => BookAppointmentCubit(getIt()));
 }

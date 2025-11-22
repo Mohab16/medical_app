@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_app/core/helpers/extensions.dart';
 import 'package:medical_app/core/helpers/spacing.dart';
@@ -6,6 +7,8 @@ import 'package:medical_app/core/routing/routes.dart';
 import 'package:medical_app/core/helpers/converters.dart';
 import 'package:medical_app/core/widgets/app_text_button.dart';
 import 'package:medical_app/core/widgets/custom_app_bar.dart';
+import 'package:medical_app/features/appointment/data/model/book_appointment_request_body.dart';
+import 'package:medical_app/features/appointment/logic/cubit/book_appointment_cubit.dart';
 import 'package:medical_app/features/appointment/ui/widgets/step_1.dart';
 import 'package:medical_app/features/appointment/ui/widgets/payment.dart';
 
@@ -16,7 +19,7 @@ import 'package:medical_app/features/home/data/models/home_data_response.dart';
 
 class AppointmentScreen extends StatefulWidget {
   final Doctors doctor;
- const AppointmentScreen({super.key, required this.doctor});
+  const AppointmentScreen({super.key, required this.doctor});
 
   @override
   State<AppointmentScreen> createState() => _AppointmentScreenState();
@@ -26,7 +29,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   int currentStep = 1;
   String chosenDate = '';
   String chosenTime = '';
- 
+  String chosenType = '';
+  String chosenPaymentOption = '';
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +69,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       label: "Payment",
                       currentStep: currentStep,
                       onTap: () {
-                        setState(() {
-                          currentStep = 2;
-                        });
+                        if (chosenDate.isNotEmpty &&
+                            chosenTime.isNotEmpty &&
+                            chosenType.isNotEmpty) {
+                          setState(() {
+                            currentStep = 2;
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: const EdgeInsets.all(16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              content: const Text(
+                                "Please choose date, time and appointment type before continuing.",
+                              ),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
                       },
                     ),
                     StepLine(),
@@ -76,9 +98,25 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       label: "Summary",
                       currentStep: currentStep,
                       onTap: () {
-                        setState(() {
-                          currentStep = 3;
-                        });
+                        if (chosenPaymentOption.isNotEmpty) {
+                          setState(() {
+                            currentStep = 3; // ✅ إنتقل للملخص
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: const EdgeInsets.all(16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              content: const Text(
+                                "Please select a payment option before continuing.",
+                              ),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],
@@ -97,58 +135,121 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           onDateChanged: (date) {
                             setState(() {
                               chosenDate = date;
-                              print(chosenDate);
                             });
                           },
                           onTimeChanged: (time) {
                             setState(() {
                               chosenTime = time;
-                              print(chosenTime);
                             });
                           },
                           onStepChanged: (step) {
                             setState(() {
                               currentStep = step;
                             });
-                          }, onTypeChanged: (type) { 
+                          },
+                          onTypeChanged: (type) {
                             setState(() {
-                              chosenType=type;
-                              print(chosenType);
+                              chosenType = type;
                             });
-                           },
+                          },
                         ),
                       ],
                       if (currentStep == 2) ...[
                         Column(
                           children: [
-                            Payment(),
+                            Payment(
+                              onOptionChanged: (selectedPaymentOption) {
+                                setState(() {
+                                  chosenPaymentOption = selectedPaymentOption;
+                                });
+                              },
+                            ),
                             verticalSpacing(245),
                             AppTextButton(
                               buttonText: "Continue",
                               onPressed: () {
-                                setState(() {
-                                  currentStep = 3;
-                                });
+                               if (chosenPaymentOption.isNotEmpty) {
+                          setState(() {
+                            currentStep = 3; // ✅ إنتقل للملخص
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: const EdgeInsets.all(16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              content: const Text(
+                                "Please select a payment option before continuing.",
+                              ),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
                               },
                             ),
                           ],
                         ),
                       ],
-                      if(currentStep==3)...[
-                      Summary(date: chosenDate, time: chosenTime,type: chosenType,doctor: widget.doctor,),
-                      verticalSpacing(30),
-                      AppTextButton(buttonText: "Book Now", onPressed: (){
-                        print("$chosenDate $chosenTime");
-                        print(chosenType);
-                        context.pushNamed(Routes.appointmentDetailsScreen, arguments:{
-                          "doctor" :widget.doctor,
-                         "fullDate": formatToFullDate(chosenDate),
-                          "time12" : convert24To12(chosenTime),
-                         "type" : chosenType,
+                      if (currentStep == 3) ...[
+                        Summary(
+                          date: chosenDate,
+                          time: chosenTime,
+                          type: chosenType,
+                          doctor: widget.doctor,
+                        ),
+                        verticalSpacing(30),
+                        BlocConsumer<
+                          BookAppointmentCubit,
+                          BookAppointmentState
+                        >(
+                          listener: (context, state) {
+                            state.whenOrNull(
+                              success: (response) {
+                                context.pushNamed(
+                                  Routes.appointmentDetailsScreen,
+                                  arguments: {
+                                    "doctor": widget.doctor,
+                                    "fullDate": formatToFullDate(chosenDate),
+                                    "time12": convert24To12(chosenTime),
+                                    "type": chosenType,
+                                  },
+                                );
+                              },
+                            );
+                            state.whenOrNull(
+                              error: (error) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(error)));
+                              },
+                            );
+                          },
+                          builder: (context, state) {
+                            return state.maybeWhen(
+                              loading: () => AppTextButton(
+                                buttonText: "Booking ...",
+                                onPressed: () {},
+                              ),
 
-                      });
-                      })
-                      ]
+                              orElse: () => AppTextButton(
+                                buttonText: "Book Now",
+                                onPressed: () {
+                                  context
+                                      .read<BookAppointmentCubit>()
+                                      .emitBookingStates(
+                                        BookAppointmentRequestBody(
+                                          doctorId: "${widget.doctor.id}",
+                                          startTime: "$chosenDate $chosenTime",
+                                        ),
+                                      );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),
